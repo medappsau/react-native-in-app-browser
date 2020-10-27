@@ -6,5 +6,11 @@
   "license": "MIT",
   "dependencies": {
     "url-parse": "^1.4.7"
+  },
+  "peerDependencies": {
+    "react-native": "^0.59",
+    "styled-components": "^4 || ^5",
+    "react-native-webview": ">=7",
+    "react-native-share": ">=2"
   }
 }
