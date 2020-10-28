@@ -1,0 +1,18 @@
+{
+  "name": "react-native-in-app-browser",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "author": "Mike James <mike@medapps.com.au>",
+  "license": "MIT",
+  "dependencies": {
+    "url-parse": "^1.4.7"
+  },
+  "scripts": {
+    "setup:example": "cp package.json main-package.json && cp example-package.json package.json && cp yarn.lock main-yarn.lock && cp example-yarn.lock yarn.lock && yarn"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  }
+}

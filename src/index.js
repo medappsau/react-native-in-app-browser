@@ -1,9 +1,7 @@
 export {
-    useInAppBrowser,
-    InAppBrowserProvider,
-    InAppBrowserContext,
+  useInAppBrowser,
+  InAppBrowserProvider,
+  InAppBrowserContext,
 } from './state';
 
-export {
-    InAppBrowser
-} from './InAppBrowser';
+export {InAppBrowser} from './InAppBrowser';
