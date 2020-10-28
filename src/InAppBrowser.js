@@ -80,7 +80,7 @@ export function InAppBrowser({
             >
                 Cancel
             </Text>
-            <Title {...styles} numberOfLines={1}>the quick brown fox jumped over the lazy dog as it pondered</Title>
+            <Title {...styles} numberOfLines={1}>{title}</Title>
             <Text
               {...styles}
               onPress={() => {
