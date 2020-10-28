@@ -5,7 +5,6 @@ export const InAppBrowserContext = createContext();
 
 let subscriber = () => {};
 export const openURL = (url) => {
-  debugger;
   subscriber(url);
 };
 let ready = false;

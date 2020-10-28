@@ -127,7 +127,7 @@ export function InAppBrowser({
             <Text
               {...styles}
               onPress={() =>
-                Linking.openURL(currentUrl).catch((e) => console.error(e))
+                Linking.openURL(currentUrl || url).catch((e) => console.error(e))
               }>
               <Icon
                 name={
