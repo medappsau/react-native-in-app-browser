@@ -1,6 +1,6 @@
 {
   "name": "@mikeljames/react-native-in-app-browser",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "src/index.js",
   "author": "Mike James <mike@medapps.com.au>",
   "license": "MIT",
