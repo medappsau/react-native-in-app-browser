@@ -24,7 +24,7 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import {InAppBrowserProvider, useInAppBrowser} from './src';
+import {InAppBrowserProvider, isReady, openURL, useInAppBrowser} from './src';
 const App: () => React$Node = () => {
   const {open} = useInAppBrowser();
   return (
@@ -48,6 +48,13 @@ const App: () => React$Node = () => {
                 });
               }}>
               <Text>Open In APP Browser!</Text>
+            </TouchableHighlight>
+            <TouchableHighlight
+              onPress={() => {
+                if (!isReady()) return;
+                openURL('https://github.com/export-mike');
+              }}>
+              <Text>Open In APP Browser Outside of React context!</Text>
             </TouchableHighlight>
           </View>
         </ScrollView>

@@ -1,0 +1,13 @@
+ios/
+android/
+.buckconfig
+.flowconfig
+.prettierrrc.js
+app.json
+App.js
+index.js
+babel-config.js
+example-*
+main-*
+metro.config.js
+__tests__

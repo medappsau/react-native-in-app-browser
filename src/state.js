@@ -1,8 +1,15 @@
-import React, {createContext, useState, useContext} from 'react';
+import React, {createContext, useState, useEffect, useContext} from 'react';
 import {InAppBrowser} from './InAppBrowser';
-import Modal from 'react-native-modal';
 
 export const InAppBrowserContext = createContext();
+
+let subscriber = () => {};
+export const openURL = (url) => {
+  debugger;
+  subscriber(url);
+};
+let ready = false;
+export const isReady = () => ready;
 export function InAppBrowserProvider({children}) {
   const [isOpen, setIsOpen] = useState(false);
   const [currentUrl, setUrl] = useState();
@@ -15,6 +22,10 @@ export function InAppBrowserProvider({children}) {
     setIsOpen(false);
   };
 
+  useEffect(() => {
+    ready = true;
+    subscriber = (url) => open({url});
+  }, [open]);
   return (
     <InAppBrowserContext.Provider
       value={{
