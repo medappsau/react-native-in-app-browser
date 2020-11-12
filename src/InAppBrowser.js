@@ -1,16 +1,16 @@
-import React, { useState, useMemo, useRef } from 'react';
+import React, {useState, useMemo, useRef} from 'react';
 import styled from 'styled-components/native';
 import urlparse from 'url-parse';
 import RNModal from 'react-native-modal';
 import RNWebView from 'react-native-webview';
 import Share from 'react-native-share';
-import { SafeAreaView, Platform, Linking } from 'react-native';
+import {SafeAreaView, Platform, Linking} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { isIphoneX } from 'react-native-iphone-x-helper';
+import {isIphoneX} from 'react-native-iphone-x-helper';
 
 const Header = styled.View`
-  background-color: ${({ backgroundColor }) => backgroundColor};
-  color: ${({ color }) => color};
+  background-color: ${({backgroundColor}) => backgroundColor};
+  color: ${({color}) => color};
   height: 80px;
   padding-left: 10px;
   padding-right: 10px;
@@ -25,12 +25,12 @@ const Buttons = styled.View`
   justify-content: space-between;
 `;
 const Button = styled(Icon.Button)`
-    color: ${({ color }) => color};
+  color: ${({color}) => color};
 `;
 
 const Footer = styled.View`
-    background-color: ${({ backgroundColor }) => backgroundColor}
-    color: ${({ color }) => color}
+    background-color: ${({backgroundColor}) => backgroundColor}
+    color: ${({color}) => color}
     padding-top: 20px;
     padding-bottom: 20px;
     padding-left: 20px;
@@ -40,14 +40,14 @@ const Browser = styled.View`
   flex: 1;
 `;
 const Text = styled.Text`
-  color: ${({ color }) => color};
+  color: ${({color}) => color};
   font-size: 18px;
-  ${({ disabled }) => disabled ? 'opacity: 0.5;' : ''}
+  ${({disabled}) => (disabled ? 'opacity: 0.5;' : '')}
 `;
 const Title = styled(Text)`
-    width: 200px;
-    font-size: 18px;
-`
+  width: 200px;
+  font-size: 18px;
+`;
 const Modal = styled(RNModal)`
   margin-left: 0;
   margin-top: 0;
@@ -71,7 +71,7 @@ export function InAppBrowser({
   const [canGoBack, setCanGoBack] = useState(url);
   const initialTitle = useMemo(() => {
     if (!currentUrl) return '';
-    const { hostname } = urlparse(currentUrl);
+    const {hostname} = urlparse(currentUrl);
     return hostname || '';
   }, []);
   const [title, setTitle] = useState(initialTitle);
@@ -81,13 +81,12 @@ export function InAppBrowser({
       <Header {...styles}>
         <SafeAreaView>
           <Buttons>
-            <Text
-              {...styles}
-              onPress={close}
-            >
+            <Text {...styles} onPress={close}>
               Cancel
             </Text>
-            <Title {...styles} numberOfLines={1}>{title}</Title>
+            <Title {...styles} numberOfLines={1}>
+              {title}
+            </Title>
             <Text
               {...styles}
               onPress={() => {
@@ -103,9 +102,9 @@ export function InAppBrowser({
         <WebView
           {...rest}
           ref={webview}
-          source={{ uri: url }}
+          source={{uri: url}}
           onLoadEnd={(event) => {
-            const { nativeEvent } = event;
+            const {nativeEvent} = event;
             setCurrentUrl(nativeEvent.url);
             setCanGoForward(nativeEvent.canGoForward);
             setCanGoBack(nativeEvent.canGoBack);
@@ -117,30 +116,39 @@ export function InAppBrowser({
       <Footer {...styles}>
         <SafeAreaView>
           <Buttons>
-            <Text disabled={!canGoBack} {...styles} onPress={() => {
-              if (!canGoBack) return;
-              webview.current.goBack()
-            }}>
+            <Text
+              disabled={!canGoBack}
+              {...styles}
+              onPress={() => {
+                if (!canGoBack) return;
+                webview.current.goBack();
+              }}>
               <Icon name="chevron-left" size={20} />
             </Text>
-            <Text disabled={!canGoForward} {...styles} onPress={() => {
-              if (!canGoForward) return;
-              webview.current.goForward()
-            }}>
+            <Text
+              disabled={!canGoForward}
+              {...styles}
+              onPress={() => {
+                if (!canGoForward) return;
+                webview.current.goForward();
+              }}>
               <Icon name="chevron-right" size={20} />
             </Text>
-            <Text {...styles} onPress={() => Share.open({ url: currentUrl })}>
+            <Text {...styles} onPress={() => Share.open({url: currentUrl})}>
               <Icon name="share-square" light size={20} />
             </Text>
             <Text
               {...styles}
               onPress={() =>
-                Linking.openURL(currentUrl || url).catch((e) => console.error(e))
+                Linking.openURL(currentUrl || url).catch((e) =>
+                  console.error(e),
+                )
               }>
               <Icon
-                name={
-                  Platform.OS === 'ios' ? 'safari' : 'chrome'
-                } size={20} light />
+                name={Platform.OS === 'ios' ? 'safari' : 'chrome'}
+                size={20}
+                light
+              />
             </Text>
           </Buttons>
         </SafeAreaView>
@@ -154,7 +162,7 @@ const styles = {
   color: 'white',
 };
 
-const noop = () => { };
+const noop = () => {};
 InAppBrowser.defaultProps = {
   open: noop,
   close: noop,
