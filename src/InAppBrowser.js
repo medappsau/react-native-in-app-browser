@@ -4,7 +4,13 @@ import urlparse from 'url-parse';
 import RNModal from 'react-native-modal';
 import RNWebView from 'react-native-webview';
 import Share from 'react-native-share';
-import {SafeAreaView, Platform, Linking} from 'react-native';
+import {
+  SafeAreaView,
+  ActivityIndicator,
+  StatusBar,
+  Platform,
+  Linking,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {isIphoneX} from 'react-native-iphone-x-helper';
 
@@ -24,10 +30,19 @@ const Buttons = styled.View`
   flex-direction: row;
   justify-content: space-between;
 `;
-const Button = styled(Icon.Button)`
-  color: ${({color}) => color};
-`;
 
+const LoadingWrapper = styled.View`
+  flex-basis: 100%;
+  position: relative;
+  background-color: white;
+`;
+const LoadingComponentWrapper = styled.View`
+  position: absolute;
+  padding-top: 50%;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+`;
 const Footer = styled.View`
     background-color: ${({backgroundColor}) => backgroundColor}
     color: ${({color}) => color}
@@ -64,6 +79,7 @@ export function InAppBrowser({
   isOpen,
   styles,
   onLoadEnd,
+  LoadingComponent,
   ...rest
 }) {
   const [currentUrl, setCurrentUrl] = useState(url);
@@ -79,6 +95,7 @@ export function InAppBrowser({
   return (
     <Modal isVisible={isOpen} onClose={close}>
       <Header {...styles}>
+        <StatusBar barStyle="light-content" />
         <SafeAreaView>
           <Buttons>
             <Text {...styles} onPress={close}>
@@ -111,6 +128,14 @@ export function InAppBrowser({
             setTitle(nativeEvent.title);
             onLoadEnd(event);
           }}
+          startInLoadingState={true}
+          renderLoading={() => (
+            <LoadingWrapper>
+              <LoadingComponentWrapper>
+                <LoadingComponent />
+              </LoadingComponentWrapper>
+            </LoadingWrapper>
+          )}
         />
       </Browser>
       <Footer {...styles}>
@@ -167,5 +192,6 @@ InAppBrowser.defaultProps = {
   open: noop,
   close: noop,
   onLoadEnd: noop,
+  LoadingComponent: ActivityIndicator,
   styles,
 };
