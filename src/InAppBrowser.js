@@ -183,7 +183,7 @@ export function InAppBrowser({
 }
 
 const styles = {
-  backgroundColor: 'rgba(17,46,127, 0.6)',
+  backgroundColor: 'rgba(17,46,127, 0.9)',
   color: 'white',
 };
 
