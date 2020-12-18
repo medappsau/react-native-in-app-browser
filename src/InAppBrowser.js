@@ -50,6 +50,16 @@ const Footer = styled.View`
     padding-bottom: 20px;
     padding-left: 20px;
     padding-right: 20px;
+    ${() => {
+      if (isIphoneX()) {
+        return `
+          min-height: 80px;
+          max-height: 80px;
+        `;
+      }
+      return ``;
+    }}
+   
 `;
 const Browser = styled.View`
   flex: 1;
@@ -139,44 +149,40 @@ export function InAppBrowser({
         />
       </Browser>
       <Footer {...styles}>
-        <SafeAreaView>
-          <Buttons>
-            <Text
-              disabled={!canGoBack}
-              {...styles}
-              onPress={() => {
-                if (!canGoBack) return;
-                webview.current.goBack();
-              }}>
-              <Icon name="chevron-left" size={20} />
-            </Text>
-            <Text
-              disabled={!canGoForward}
-              {...styles}
-              onPress={() => {
-                if (!canGoForward) return;
-                webview.current.goForward();
-              }}>
-              <Icon name="chevron-right" size={20} />
-            </Text>
-            <Text {...styles} onPress={() => Share.open({url: currentUrl})}>
-              <Icon name="share-square" light size={20} />
-            </Text>
-            <Text
-              {...styles}
-              onPress={() =>
-                Linking.openURL(currentUrl || url).catch((e) =>
-                  console.error(e),
-                )
-              }>
-              <Icon
-                name={Platform.OS === 'ios' ? 'safari' : 'chrome'}
-                size={20}
-                light
-              />
-            </Text>
-          </Buttons>
-        </SafeAreaView>
+        <Buttons>
+          <Text
+            disabled={!canGoBack}
+            {...styles}
+            onPress={() => {
+              if (!canGoBack) return;
+              webview.current.goBack();
+            }}>
+            <Icon name="chevron-left" size={20} />
+          </Text>
+          <Text
+            disabled={!canGoForward}
+            {...styles}
+            onPress={() => {
+              if (!canGoForward) return;
+              webview.current.goForward();
+            }}>
+            <Icon name="chevron-right" size={20} />
+          </Text>
+          <Text {...styles} onPress={() => Share.open({url: currentUrl})}>
+            <Icon name="share-square" light size={20} />
+          </Text>
+          <Text
+            {...styles}
+            onPress={() =>
+              Linking.openURL(currentUrl || url).catch((e) => console.error(e))
+            }>
+            <Icon
+              name={Platform.OS === 'ios' ? 'safari' : 'chrome'}
+              size={20}
+              light
+            />
+          </Text>
+        </Buttons>
       </Footer>
     </Modal>
   );
