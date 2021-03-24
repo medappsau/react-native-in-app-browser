@@ -62,12 +62,17 @@ const Footer = styled.View`
    
 `;
 const Browser = styled.View`
+  position: relative;
   flex: 1;
 `;
 const Text = styled.Text`
   color: ${({color}) => color};
   font-size: 18px;
   ${({disabled}) => (disabled ? 'opacity: 0.5;' : '')}
+`;
+const ErrorText = styled.Text`
+  color: black;
+  font-size: 18px;
 `;
 const Title = styled(Text)`
   width: 200px;
@@ -82,6 +87,51 @@ const Modal = styled(RNModal)`
 const WebView = styled(RNWebView)`
   flex: 1;
 `;
+const ErrorStateWrapper = styled.View`
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 100;
+  elevation: 100;
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  background: white;
+  align-items: center;
+`;
+const ErrorStateContent = styled.View`
+  padding-top: 40;
+  padding-left: 20;
+  padding-right: 20;
+  justify-content: space-between;
+  flex-basis: 50%;
+  align-items: center;
+`;
+const GoBackButton = styled.TouchableOpacity`
+  padding-left: 50;
+  padding-right: 50;
+  padding-top: 15;
+  padding-bottom: 15;
+  border-radius: 10;
+  background-color: ${({backgroundColor}) => backgroundColor};
+`;
+function ErrorState({error, styles, onGoBack}) {
+  return (
+    <ErrorStateWrapper>
+      <ErrorStateContent>
+        <ErrorText>An Error Ocurred</ErrorText>
+        <ErrorText>
+          Description: {error.description} {'\n\n'}
+          Domain: {error.domain}
+        </ErrorText>
+        <GoBackButton {...styles} onPress={onGoBack}>
+          <Text {...styles}>Go back</Text>
+        </GoBackButton>
+      </ErrorStateContent>
+    </ErrorStateWrapper>
+  );
+}
+
 export function InAppBrowser({
   url,
   open,
@@ -90,11 +140,14 @@ export function InAppBrowser({
   styles,
   onLoadEnd,
   LoadingComponent,
+  ErrorState,
   ...rest
 }) {
   const [currentUrl, setCurrentUrl] = useState(url);
   const [canGoForward, setCanGoForward] = useState(url);
   const [canGoBack, setCanGoBack] = useState(url);
+  const [previousUrl, setPreviousUrl] = useState(url);
+  const [error, setError] = useState();
   const initialTitle = useMemo(() => {
     if (!currentUrl) return '';
     const {hostname} = urlparse(currentUrl);
@@ -119,6 +172,7 @@ export function InAppBrowser({
               onPress={() => {
                 if (!webview.current) return;
                 webview.current.reload();
+                setError();
               }}>
               <Icon name="refresh" size={20} />
             </Text>
@@ -132,6 +186,7 @@ export function InAppBrowser({
           source={{uri: url}}
           onLoadEnd={(event) => {
             const {nativeEvent} = event;
+            setPreviousUrl(currentUrl);
             setCurrentUrl(nativeEvent.url);
             setCanGoForward(nativeEvent.canGoForward);
             setCanGoBack(nativeEvent.canGoBack);
@@ -146,7 +201,22 @@ export function InAppBrowser({
               </LoadingComponentWrapper>
             </LoadingWrapper>
           )}
+          onError={(syntheticEvent) => {
+            const {nativeEvent} = syntheticEvent;
+            setError(nativeEvent);
+          }}
         />
+        {error && (
+          <ErrorState
+            styles={styles}
+            error={error}
+            onGoBack={() => {
+              setError();
+              setCurrentUrl(previousUrl);
+              webview.current.reload();
+            }}
+          />
+        )}
       </Browser>
       <Footer {...styles}>
         <Buttons>
@@ -156,6 +226,7 @@ export function InAppBrowser({
             onPress={() => {
               if (!canGoBack) return;
               webview.current.goBack();
+              setError();
             }}>
             <Icon name="chevron-left" size={20} />
           </Text>
@@ -165,6 +236,7 @@ export function InAppBrowser({
             onPress={() => {
               if (!canGoForward) return;
               webview.current.goForward();
+              setError();
             }}>
             <Icon name="chevron-right" size={20} />
           </Text>
@@ -199,5 +271,6 @@ InAppBrowser.defaultProps = {
   close: noop,
   onLoadEnd: noop,
   LoadingComponent: ActivityIndicator,
+  ErrorState,
   styles,
 };

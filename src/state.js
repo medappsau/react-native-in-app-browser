@@ -9,7 +9,7 @@ export const openURL = (url) => {
 };
 let ready = false;
 export const isReady = () => ready;
-export function InAppBrowserProvider({children}) {
+export function InAppBrowserProvider({children, ErrorState, LoadingComponent}) {
   const [isOpen, setIsOpen] = useState(false);
   const [currentUrl, setUrl] = useState();
   const open = ({url}) => {
@@ -35,6 +35,8 @@ export function InAppBrowserProvider({children}) {
       }}>
       <InAppBrowser
         url={currentUrl}
+        ErrorState={ErrorState}
+        LoadingComponent={LoadingComponent}
         isOpen={isOpen}
         open={open}
         close={close}
