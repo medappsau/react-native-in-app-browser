@@ -1,6 +1,11 @@
 # react-native-in-app-browser
+Wraps react-native-webview in a modal for in-app browsing.
 
 `yarn add @medapps/react-native-in-app-browser`
+
+Cookies cannot be set with react-native-inappbrowser-reborn. This component was created to replace it.
+
+set cookies before a url has been opened using: https://github.com/react-native-cookies/cookies
 
 # API
 
@@ -44,3 +49,24 @@ function ExampleComponent() {
   );
 }
 ```
+
+
+# Contributing
+
+
+ `git clone https://github.com/medappsau/react-native-in-app-browser`
+ 
+ `yarn`
+ 
+ `yarn setup:example`
+ 
+ `open ios/example.xcworkspace`
+ 
+ press the play button
+ 
+ before committing to master run: 
+ 
+ `yarn setup:main`
+ 
+ then commit and submit a PR :tada:
+
