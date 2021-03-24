@@ -9,9 +9,24 @@ This component wraps [WebView](https://github.com/react-native-webview/react-nat
 ### Non React Context
 
 ```js
-import {openURL} from '@medapps/react-native-in-app-browser';
+import {InAppBrowserProvider} from '@medapps/react-native-in-app-browser';
 
-openURL(url); // opens url
+function MyApp() {
+  return (
+    <InAppBrowserProvider
+      ErrorState={CustomErrorStateComponent} // optional ({error, onGoBack}) =>
+      LoadingComponent={CustomLoadingComponent} // optional
+      theme={customTheme} // optional {color, backgroundColor}
+    >
+      <Example />
+    </InAppBrowserProvider>
+  );
+}
+
+function Example() {
+  const {open, close, url, isOpen} = useInAppBrowser();
+  return <Text onPress={() => open({url: 'https://med.app'})}>Open Url!</Text>;
+}
 ```
 
 ### React Context

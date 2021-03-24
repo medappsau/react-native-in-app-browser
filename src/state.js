@@ -9,7 +9,13 @@ export const openURL = (url) => {
 };
 let ready = false;
 export const isReady = () => ready;
-export function InAppBrowserProvider({children, ErrorState, LoadingComponent}) {
+export function InAppBrowserProvider({
+  children,
+  theme,
+  ErrorState,
+  LoadingComponent,
+  ...rest
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const [currentUrl, setUrl] = useState();
   const open = ({url}) => {
@@ -34,11 +40,13 @@ export function InAppBrowserProvider({children, ErrorState, LoadingComponent}) {
         isOpen,
       }}>
       <InAppBrowser
+        {...rest}
         url={currentUrl}
         ErrorState={ErrorState}
         LoadingComponent={LoadingComponent}
         isOpen={isOpen}
         open={open}
+        styles={theme}
         close={close}
       />
       {children}
